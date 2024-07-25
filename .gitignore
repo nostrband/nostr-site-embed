@@ -1,0 +1,13 @@
+**/node_modules
+**/build
+**/dist
+**/.vscode
+**/*.d.ts
+**/*.d.ts.map
+!src/types/*
+
+pnpm-lock.yaml
+.pnpm-store/
+.DS_Store
+
+TODO.md

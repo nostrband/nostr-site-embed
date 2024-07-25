@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "module": "nodenext",
+    "target": "esnext",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "declaration": true,
+    "strict": true,
+    "strictNullChecks": true,
+    "moduleResolution": "nodenext",
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "emitDeclarationOnly": true,
+    "outDir": "lib",
+    "rootDir": ".",
+    "allowImportingTsExtensions": true,
+
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
+    "types": ["vite/client", "jest"],
+    "isolatedModules": true
+  },
+}

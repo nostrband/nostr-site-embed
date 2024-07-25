@@ -1,0 +1,22 @@
+{
+  "name": "nostr-site-embeds",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite --config vite-dev.config.js",
+    "build": "vite build",
+    "publish": "vite build && npm publish"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "terser": "^5.31.3",
+    "typescript": "^5.5.3",
+    "vite": "^5.3.4",
+    "vite-plugin-dts": "^4.0.0-beta.1"
+  },
+  "dependencies": {
+    "libnostrsite": "file:../libnostrsite"
+  }
+}
