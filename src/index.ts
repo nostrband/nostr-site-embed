@@ -300,12 +300,13 @@ async function process(ns: GlobalNostrSite, e: Element) {
           url_path: u.pathname + u.search,
           only_path: !oe.title && !oe.description,
           show_thumbnail: oe.thumbnail_url && (oe.title || oe.description),
-          thumbnail_url_nocors: oe.thumbnail_url ? CORS_PROXY + encodeURIComponent(oe.thumbnail_url) : undefined,
-        }
+          thumbnail_url_nocors: oe.thumbnail_url
+            ? CORS_PROXY + encodeURIComponent(oe.thumbnail_url)
+            : undefined,
+        };
 
         const code = await ns.renderer.renderPartial("embed-url", data, {});
         console.log("embed url rendered", data, code);
-
 
         // const maxHeight = 200;
         // const code = `<style>
@@ -315,8 +316,8 @@ async function process(ns: GlobalNostrSite, e: Element) {
         //   .np-embed-figure-thumbnail img {
         //     height: 100%;
         //     min-height: ${maxHeight}px;
-        //     border-top-right-radius: 5px; 
-        //     border-bottom-right-radius: 5px; 
+        //     border-top-right-radius: 5px;
+        //     border-bottom-right-radius: 5px;
         //   }
         //   @media screen and (max-width: 600px) {
         //     .np-embed-figure a {
@@ -329,9 +330,9 @@ async function process(ns: GlobalNostrSite, e: Element) {
         //       width: 100%;
         //       height: auto;
         //       max-height: ${maxHeight * 2}px;
-        //       border-top-right-radius: 5px; 
-        //       border-top-left-radius: 5px; 
-        //       border-bottom-right-radius: 0; 
+        //       border-top-right-radius: 5px;
+        //       border-top-left-radius: 5px;
+        //       border-bottom-right-radius: 0;
         //     }
         //   }
         // </style><figure class='np-embed-figure'><a href="${url}" target="_blank"
@@ -369,8 +370,8 @@ async function process(ns: GlobalNostrSite, e: Element) {
         //   oe.thumbnail_url && (oe.title || oe.description)
         //     ? `<div class='np-embed-figure-thumbnail'><img src="${
         //         oe.thumbnail_url
-        //       }" 
-        //         style='object-fit: cover; object-position: left top; ' 
+        //       }"
+        //         style='object-fit: cover; object-position: left top; '
         //         onerror="this.src='${
         //           CORS_PROXY + encodeURIComponent(oe.thumbnail_url)
         //         }'; this.onerror=() => { this.parentElement.style.display='none' }"/></div>`
@@ -463,6 +464,10 @@ async function process(ns: GlobalNostrSite, e: Element) {
 }
 
 async function init() {
+  // @ts-ignore
+  if (!window.nostrSite)
+    await new Promise<Event>((ok) => document.addEventListener("npLoad", ok));
+
   // @ts-ignore
   const ns: GlobalNostrSite = window.nostrSite;
   await ns.tabReady;
