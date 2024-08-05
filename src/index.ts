@@ -197,7 +197,8 @@ async function process(ns: GlobalNostrSite, e: Element) {
     // and to show the loading spinner
     // NOTE: while loading, we still show the original link so let
     // users click on it if embed is slow
-    const code = `<div data-oembed-source="${url}">${e.innerHTML}</div>
+    const urlId = ""+Math.random();
+    const code = `<span data-oembed-id="${urlId}">${e.innerHTML}</span>
         <iframe
           frameborder="0"
           allow="geolocation 'none'"
@@ -205,7 +206,7 @@ async function process(ns: GlobalNostrSite, e: Element) {
           referrerpolicy="no-referrer"
           sandbox="allow-scripts allow-same-origin allow-presentation allow-popups allow-popups-to-escape-sandbox"
           style="width: 100%; border-radius: 5px;"
-          data-oembed-url="${url}"
+          data-oembed-id="${urlId}"
           scrolling="no"
         ></iframe>`;
 
@@ -214,7 +215,7 @@ async function process(ns: GlobalNostrSite, e: Element) {
 
     // now get the ref to an iframe we've created
     const iframe: HTMLIFrameElement | null = document.querySelector(
-      `iframe[data-oembed-url="${url}"]`
+      `iframe[data-oembed-id="${urlId}"]`
     );
     if (!iframe) throw new Error("Failed to inject oembed iframe");
 
@@ -429,7 +430,7 @@ async function process(ns: GlobalNostrSite, e: Element) {
             const d = pageWidth / w;
             w = Math.round(w * d);
             h = Math.round(h * d);
-            if (wasHeight !== h) {
+            if (Math.abs(wasHeight - h) > 2) {
               wasHeight = h;
               console.log("embed adjusted height", w, h);
 
@@ -452,7 +453,7 @@ async function process(ns: GlobalNostrSite, e: Element) {
       iframe.onload = () => {
         // drop the original link, we've got the oembed loaded!
         const source = document.querySelector(
-          `div[data-oembed-source="${url}"]`
+          `span[data-oembed-id="${urlId}"]`
         );
         if (source) source.remove();
 
@@ -465,13 +466,20 @@ async function process(ns: GlobalNostrSite, e: Element) {
 
 async function init() {
   // @ts-ignore
-  if (!window.nostrSite)
+  console.log("embeds init", window.nostrSite);
+  // @ts-ignore
+  if (!window.nostrSite) {
+    console.log("embeds waiting for npLoad");
     await new Promise<Event>((ok) => document.addEventListener("npLoad", ok));
+  }
+
+  console.log("embeds starting");
 
   // @ts-ignore
   const ns: GlobalNostrSite = window.nostrSite;
   await ns.tabReady;
 
+  console.log("embeds tab ready");
   const embeds = document.querySelectorAll("np-embed");
   for (const el of embeds) {
     try {
